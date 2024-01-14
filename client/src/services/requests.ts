@@ -55,7 +55,7 @@ export const createQuote = async () => {
 export const createOrder = async (
   quoteId: string,
   userId: string,
-  fromAmount: string
+  fromAmount: number
 ) => {
   try {
     const body = {
@@ -64,7 +64,7 @@ export const createOrder = async (
       from_amount: fromAmount,
     };
     const response = await api.post('/orders', body);
-    if (response.status !== 200) {
+    if (response.status !== 201) {
       throw new Error(`Error: Received status code ${response.status}`);
     }
     return response.data;
