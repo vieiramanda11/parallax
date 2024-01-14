@@ -11,6 +11,7 @@ import {
   selectQuoteData,
   setQuoteData,
 } from '../slices/quoteSlice';
+import { setError } from '../slices/errorSlice';
 
 const Quote = () => {
   const dispatch = useDispatch();
@@ -33,7 +34,9 @@ const Quote = () => {
   const [timer, setTimer] = useState(calculateRemainingTime);
 
   const handleQuote = async () => {
-    const newQuoteData = await createQuote();
+    const newQuoteData = await createQuote().catch((error) => {
+      dispatch(setError('Error creating quote'));
+    });
     if (newQuoteData) {
       dispatch(setQuoteData(newQuoteData.data));
       setTimer(300);

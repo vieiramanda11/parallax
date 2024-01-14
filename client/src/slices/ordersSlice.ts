@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store/rootReducer';
 import { getUserOrders } from '../services/requests';
+import { setError } from './errorSlice';
 
 interface OrderState {
   data: any[];
@@ -11,11 +12,6 @@ const initialState: OrderState = {
   data: [],
   ordersUpdated: false,
 };
-
-export const fetchOrders = createAsyncThunk('orders/fetchOrders', async () => {
-  const response = await getUserOrders('1a2b7426-117e-4620-b795-d0fd5872b30f');
-  return response.data;
-});
 
 export const ordersSlice = createSlice({
   name: 'orders',
@@ -36,6 +32,22 @@ export const ordersSlice = createSlice({
 });
 
 export const { setOrdersUpdated } = ordersSlice.actions;
+
+export const fetchOrders = createAsyncThunk(
+  'orders/fetchOrders',
+  async (_, thunkAPI) => {
+    try {
+      const response = await getUserOrders(
+        '1a2b7426-117e-4620-b795-d0fd5872b30f'
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      thunkAPI.dispatch(setError('Error fetching orders'));
+      throw error;
+    }
+  }
+);
 
 export const selectOrders = (state: RootState) => state.orders.data;
 

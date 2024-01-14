@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectQuoteData } from '../slices/quoteSlice';
 import { fetchOrders } from '../slices/ordersSlice';
 import { AppDispatch } from '../store/rootReducer';
+import { setError } from '../slices/errorSlice';
 
 const CreateOrder = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -19,7 +20,14 @@ const CreateOrder = () => {
 
   const handleExecute = () => {
     if (quoteData) {
-      createOrder(quoteData.id, '1a2b7426-117e-4620-b795-d0fd5872b30f', amount);
+      createOrder(
+        quoteData.id,
+        '1a2b7426-117e-4620-b795-d0fd5872b30f',
+        amount
+      ).catch(() => {
+        dispatch(setError('Error creating order'));
+      });
+
       setTimeout(() => {
         dispatch(fetchOrders());
       }, 5000);
@@ -29,7 +37,7 @@ const CreateOrder = () => {
   return (
     <Grid item xs={12} md={6}>
       <TextField
-        inputProps={{ min: '0' }}
+        // inputProps={{ min: '0' }}
         type="number"
         label="Amount"
         variant="outlined"

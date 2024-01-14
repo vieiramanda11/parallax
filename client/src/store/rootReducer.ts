@@ -1,13 +1,14 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import thunk from 'redux-thunk';
 import quoteReducer from '../slices/quoteSlice';
 import ordersReducer from '../slices/ordersSlice';
+import errorReducer from '../slices/errorSlice';
 
 const rootReducer = combineReducers({
   quote: quoteReducer,
   orders: ordersReducer,
+  error: errorReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
