@@ -1,55 +1,23 @@
 import api from './api';
 
 export const getUsers = async () => {
-  try {
-    const response = await api.get('/users');
-    if (response.status !== 200) {
-      throw new Error(`Error: Received status code ${response.status}`);
-    }
-    return response.data;
-  } catch (error) {
-    console.error('Failed to fetch users:', error);
-    return null;
-  }
+  const response = await api.get('/users');
+  return response.data;
 };
 
 export const getUserOrders = async (userId: string) => {
-  try {
-    const response = await api.get(`/users/${userId}/orders`);
-    if (response.status !== 200) {
-      throw new Error(`Error: Received status code ${response.status}`);
-    }
-    return response.data;
-  } catch (error) {
-    console.error(`Failed to fetch orders for user ${userId}:`, error);
-    return null;
-  }
+  const response = await api.get(`/users/${userId}/orders`);
+  return response.data;
 };
 
 export const getOrder = async (orderId: string) => {
-  try {
-    const response = await api.get(`/orders/${orderId}`);
-    if (response.status !== 200) {
-      throw new Error(`Error: Received status code ${response.status}`);
-    }
-    return response.data;
-  } catch (error) {
-    console.error(`Failed to fetch order ${orderId}:`, error);
-    return null;
-  }
+  const response = await api.get(`/orders/${orderId}`);
+  return response.data;
 };
 
 export const createQuote = async () => {
-  try {
-    const response = await api.post('/quotes');
-    if (response.status !== 201) {
-      throw new Error(`Error: Received status code ${response.status}`);
-    }
-    return response.data;
-  } catch (error) {
-    console.error('Failed to create quote:', error);
-    return null;
-  }
+  const response = await api.post('/quotes');
+  return response.data;
 };
 
 export const createOrder = async (
@@ -57,19 +25,11 @@ export const createOrder = async (
   userId: string,
   fromAmount: number
 ) => {
-  try {
-    const body = {
-      quote_id: quoteId,
-      user_id: userId,
-      from_amount: fromAmount,
-    };
-    const response = await api.post('/orders', body);
-    if (response.status !== 201) {
-      throw new Error(`Error: Received status code ${response.status}`);
-    }
-    return response.data;
-  } catch (error) {
-    console.error('Failed to create order:', error);
-    return null;
-  }
+  const body = {
+    quote_id: quoteId,
+    user_id: userId,
+    from_amount: fromAmount,
+  };
+  const response = await api.post('/orders', body);
+  return response.data;
 };
