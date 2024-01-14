@@ -15,7 +15,7 @@ export const getUsers = async () => {
 
 export const getUserOrders = async (userId: string) => {
   try {
-    const response = await api.get(`/api/users/${userId}/orders`);
+    const response = await api.get(`/users/${userId}/orders`);
     if (response.status !== 200) {
       throw new Error(`Error: Received status code ${response.status}`);
     }
@@ -28,7 +28,7 @@ export const getUserOrders = async (userId: string) => {
 
 export const getOrder = async (orderId: string) => {
   try {
-    const response = await api.get(`/api/orders/${orderId}`);
+    const response = await api.get(`/orders/${orderId}`);
     if (response.status !== 200) {
       throw new Error(`Error: Received status code ${response.status}`);
     }
@@ -41,8 +41,8 @@ export const getOrder = async (orderId: string) => {
 
 export const createQuote = async () => {
   try {
-    const response = await api.post('/api/quotes');
-    if (response.status !== 200) {
+    const response = await api.post('/quotes');
+    if (response.status !== 201) {
       throw new Error(`Error: Received status code ${response.status}`);
     }
     return response.data;
@@ -63,7 +63,7 @@ export const createOrder = async (
       user_id: userId,
       from_amount: fromAmount,
     };
-    const response = await api.post('/api/orders', body);
+    const response = await api.post('/orders', body);
     if (response.status !== 200) {
       throw new Error(`Error: Received status code ${response.status}`);
     }
