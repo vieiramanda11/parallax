@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchOrders, selectOrders } from '../slices/ordersSlice';
+import { Order, fetchOrders, selectOrders } from '../slices/ordersSlice';
 import { AppDispatch } from '../store/rootReducer';
 
 const Orders = () => {
@@ -44,7 +44,7 @@ const Orders = () => {
       )}
       <List sx={{ maxHeight: '400px', overflow: 'auto' }}>
         {orders &&
-          orders.map((order: any) => (
+          orders.map((order: Order) => (
             <ListItem
               key={order.id}
               sx={{

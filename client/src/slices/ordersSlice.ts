@@ -3,8 +3,15 @@ import { RootState } from '../store/rootReducer';
 import { getUserOrders } from '../services/requests';
 import { setMessage } from './messageSlice';
 
+export interface Order {
+  id: string;
+  status: string;
+  from_amount: string;
+  quote_id: string;
+  user_id: string;
+}
 interface OrderState {
-  data: any[];
+  data: Order[];
   ordersUpdated: boolean;
 }
 
@@ -24,7 +31,7 @@ export const ordersSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(
       fetchOrders.fulfilled,
-      (state, action: PayloadAction<any[]>) => {
+      (state, action: PayloadAction<Order[]>) => {
         state.data = action.payload;
       }
     );
