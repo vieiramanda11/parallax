@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Snackbar, Alert } from '@mui/material';
-import { clearError, selectErrorMessage } from '../slices/errorSlice';
+import { clearMessage, selectMessage } from '../slices/messageSlice';
 
-const ErrorToast = () => {
+const Toast = () => {
   const dispatch = useDispatch();
-  const errorMessage = useSelector(selectErrorMessage);
+  const message = useSelector(selectMessage);
+
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (errorMessage) {
+    if (message) {
       setOpen(true);
     }
-  }, [errorMessage]);
+  }, [message]);
 
   const handleClose = () => {
-    dispatch(clearError());
+    dispatch(clearMessage());
     setOpen(false);
   };
 
@@ -26,11 +27,15 @@ const ErrorToast = () => {
       autoHideDuration={6000}
       onClose={handleClose}
     >
-      <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-        {errorMessage}
+      <Alert
+        onClose={handleClose}
+        severity={message.type === 'success' ? 'success' : 'error'}
+        sx={{ width: '100%' }}
+      >
+        {message.message}
       </Alert>
     </Snackbar>
   );
 };
 
-export default ErrorToast;
+export default Toast;

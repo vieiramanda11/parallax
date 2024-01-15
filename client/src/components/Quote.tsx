@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Button, Grid } from '@mui/material';
+import { Typography, Button, Grid, Paper, Box } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { utcToZonedTime } from 'date-fns-tz';
 import { differenceInSeconds } from 'date-fns';
@@ -11,7 +11,7 @@ import {
   selectQuoteData,
   setQuoteData,
 } from '../slices/quoteSlice';
-import { setError } from '../slices/errorSlice';
+import { setMessage } from '../slices/messageSlice';
 
 const Quote = () => {
   const dispatch = useDispatch();
@@ -34,13 +34,17 @@ const Quote = () => {
   const [timer, setTimer] = useState(calculateRemainingTime);
 
   const handleQuote = async () => {
-    const newQuoteData = await createQuote().catch((error) => {
-      dispatch(setError('Error creating quote'));
-    });
-    if (newQuoteData) {
-      dispatch(setQuoteData(newQuoteData.data));
-      setTimer(300);
-    }
+    await createQuote()
+      .then((response) => {
+        dispatch(setQuoteData(response.data));
+        setTimer(300);
+        dispatch(setMessage({ message: 'Quote created', type: 'success' }));
+      })
+      .catch((error) => {
+        dispatch(
+          setMessage({ message: 'Error creating quote', type: 'error' })
+        );
+      });
   };
 
   useEffect(() => {
@@ -63,32 +67,39 @@ const Quote = () => {
 
   return (
     <Grid item xs={12} md={6}>
-      <Typography variant="h5" gutterBottom>
-        USD ⇒ PHP Currency Exchange
-      </Typography>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleQuote}
-        fullWidth
-        sx={{ marginBottom: 2 }}
-      >
-        Quote
-      </Button>
-      {quoteData && (
-        <>
-          <Typography variant="body1" sx={{ marginTop: 1 }}>
-            {`Exchange Rate: ${quoteData.rate} USD to PHP`}
+      <Paper elevation={2} sx={{ padding: 3 }}>
+        <Box height={200}>
+          <Typography variant="h5" gutterBottom>
+            USD ⇒ PHP Currency Exchange
           </Typography>
-          <Typography variant="body2" sx={{ marginTop: 1 }}>
-            {timer === 0
-              ? 'Quote is not valid anymore, make a new one'
-              : `Time remaining: ${Math.floor(timer / 60)}:${
-                  timer % 60 < 10 ? '0' : ''
-                }${timer % 60}`}
-          </Typography>
-        </>
-      )}
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleQuote}
+            sx={{ marginBottom: 2 }}
+          >
+            Quote
+          </Button>
+          {quoteData && (
+            <>
+              <Typography variant="body1" sx={{ marginTop: 1 }}>
+                {`Exchange Rate: ${quoteData.rate}`}
+              </Typography>
+              <Typography
+                color={timer === 0 ? 'error' : ''}
+                variant="body2"
+                sx={{ marginTop: 1 }}
+              >
+                {timer === 0
+                  ? 'Quote is not valid anymore, make a new one'
+                  : `Time remaining: ${Math.floor(timer / 60)}:${
+                      timer % 60 < 10 ? '0' : ''
+                    }${timer % 60}`}
+              </Typography>
+            </>
+          )}
+        </Box>
+      </Paper>
     </Grid>
   );
 };

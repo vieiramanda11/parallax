@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store/rootReducer';
 import { getUserOrders } from '../services/requests';
-import { setError } from './errorSlice';
+import { setMessage } from './messageSlice';
 
 interface OrderState {
   data: any[];
@@ -43,7 +43,9 @@ export const fetchOrders = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.error('Error fetching orders:', error);
-      thunkAPI.dispatch(setError('Error fetching orders'));
+      thunkAPI.dispatch(
+        setMessage({ message: 'Error fetching orders', type: 'error' })
+      );
       throw error;
     }
   }

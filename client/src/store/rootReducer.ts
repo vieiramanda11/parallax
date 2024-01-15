@@ -3,12 +3,12 @@ import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import quoteReducer from '../slices/quoteSlice';
 import ordersReducer from '../slices/ordersSlice';
-import errorReducer from '../slices/errorSlice';
+import messageReducer from '../slices/messageSlice';
 
 const rootReducer = combineReducers({
   quote: quoteReducer,
   orders: ordersReducer,
-  error: errorReducer,
+  message: messageReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

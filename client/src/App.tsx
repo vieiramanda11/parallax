@@ -1,22 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import { getUsers } from './services/requests';
+import { Container, Paper, Grid } from '@mui/material';
+import Quote from './components/Quote';
+import CreateOrder from './components/CreateOrder';
+import Orders from './components/Orders';
+import Toast from './components/Toast';
+import { useSelector } from 'react-redux';
+import { selectMessage } from './slices/messageSlice';
 
-function App() {
-  const [users, setUsers] = useState(null);
+const App = () => {
+  const message = useSelector(selectMessage);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await getUsers();
-      setUsers(data);
-    };
-
-    fetchData();
-  }, []);
-
-  console.log('users', users);
-  return <div className="App"></div>;
-}
+  return (
+    <Container maxWidth="md">
+      <Paper elevation={3} sx={{ padding: 3, marginY: 3 }}>
+        <Grid container spacing={2}>
+          <Quote />
+          <CreateOrder />
+          <Orders />
+        </Grid>
+      </Paper>
+      {message.message !== null && <Toast />}
+    </Container>
+  );
+};
 
 export default App;
